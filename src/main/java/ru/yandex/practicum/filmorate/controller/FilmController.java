@@ -64,8 +64,7 @@ public class FilmController {
             log.debug("Ошибка валидации!", exception);
             throw exception;
         }
-        if (LocalDate.parse(film.getReleaseDate(), formatter).isBefore(LocalDate.of
-                (1895, Month.DECEMBER, 28))) {
+        if (LocalDate.parse(film.getReleaseDate(), formatter).isBefore(LocalDate.of(1895, Month.DECEMBER, 28))) {
             flag = false;
             ValidationException exception = new ValidationException("Дата релиза ранее 28 декабря 1895 года!");
             log.debug("Ошибка валидации!", exception);
