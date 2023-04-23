@@ -25,7 +25,7 @@ public class UserController {
     public User addUser(@RequestBody @Valid User user) throws ValidationException {
         if (userValidator(user)) {
             user.setId(id++);
-            log.debug("Будет сохранен пользователь: {}" , user);
+            log.debug("Будет сохранен пользователь: {}", user);
             users.put(user.getId(), user);
         }
 
@@ -72,7 +72,7 @@ public class UserController {
             log.debug("Ошибка валидации!", exception);
             throw exception;
         }
-        if (user.getName() == null || user.getName().isBlank() ) {
+        if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
             log.debug("Вместо пустого имени пользователя используется логин.");
         }
