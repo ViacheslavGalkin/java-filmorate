@@ -6,8 +6,6 @@ import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.time.LocalDate;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import org.junit.Test;
@@ -39,7 +37,7 @@ public class ValidateTests {
 
     @Test
     public void testUserWithEmptyName() throws ValidationException {
-        User user = new User( 33, "asdf@yandex.ru", "asdf", "", "1997-10-20");
+        User user = new User(33, "asdf@yandex.ru", "asdf", "", "1997-10-20");
         userController.addUser(user);
         assertEquals(user.getName(), user.getLogin());
     }
