@@ -23,7 +23,7 @@ public class UserController {
 
     @PostMapping
     public User addUser(@RequestBody @Valid User user) throws ValidationException {
-        if (userValidator(user)) {
+        if (isUserValid(user)) {
             user.setId(id++);
             log.debug("Будет сохранен пользователь: {}", user);
             users.put(user.getId(), user);
@@ -37,7 +37,7 @@ public class UserController {
         if (!users.containsKey(user.getId())) {
             throw new ValidationException("Пользователь не найден!");
         } else {
-            if (userValidator(user)) {
+            if (isUserValid(user)) {
                 log.debug("Будет обновлен пользователь: {}", user);
                 users.put(user.getId(), user);
             }
@@ -51,23 +51,23 @@ public class UserController {
         return new ArrayList<>(users.values());
     }
 
-    private Boolean userValidator(User user) throws ValidationException {
-        Boolean flag = true;
+    private Boolean isUserValid(User user) throws ValidationException {
+        Boolean isValid = true;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         if (user.getEmail() == null || user.getEmail().isBlank() || !user.getEmail().contains("@")) {
-            flag = false;
+            isValid = false;
             ValidationException exception = new ValidationException("Электронная почта пустая или не содержит @!");
             log.debug("Ошибка валидации!", exception);
             throw exception;
         }
         if (user.getLogin() == null || user.getLogin().isBlank() || user.getLogin().contains(" ")) {
-            flag = false;
+            isValid = false;
             ValidationException exception = new ValidationException("Логин пустой или содержит пробелы!");
             log.debug("Ошибка валидации!", exception);
             throw exception;
         }
         if (LocalDate.parse(user.getBirthday(), formatter).isAfter(LocalDate.now())) {
-            flag = false;
+            isValid = false;
             ValidationException exception = new ValidationException("Дата рождения пользователя в будущем!");
             log.debug("Ошибка валидации!", exception);
             throw exception;
@@ -77,7 +77,7 @@ public class UserController {
             log.debug("Вместо пустого имени пользователя используется логин.");
         }
 
-        return flag;
+        return isValid;
     }
 
 }

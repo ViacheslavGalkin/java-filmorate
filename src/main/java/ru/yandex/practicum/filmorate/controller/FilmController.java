@@ -16,13 +16,13 @@ import java.util.List;
 @RequestMapping("/films")
 @Slf4j
 public class FilmController {
-    private static HashMap<Integer, Film> films = new HashMap<>();
-    private static int id = 1;
+    private HashMap<Integer, Film> films = new HashMap<>();
+    private int id = 1;
 
     @PostMapping
     public Film addFilm(@RequestBody Film film) throws ValidationException {
         setFilmId(film);
-        if (filmValidator(film)) {
+        if (isFilmValid(film)) {
             log.debug("Будет добавлен фильм: {}", film);
             films.put(film.getId(), film);
         }
@@ -35,7 +35,7 @@ public class FilmController {
         if (!films.containsKey(film.getId())) {
             throw new ValidationException("Фильм не найден!");
         } else {
-            if (filmValidator(film)) {
+            if (isFilmValid(film)) {
                 log.debug("Будет обновлен фильм: {}", film);
                 films.put(film.getId(), film);
             }
@@ -49,35 +49,35 @@ public class FilmController {
         return new ArrayList<>(films.values());
     }
 
-    private Boolean filmValidator(Film film) throws ValidationException {
-        Boolean flag = true;
+    private Boolean isFilmValid(Film film) throws ValidationException {
+        Boolean isValid = true;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         if (film.getName() == null || film.getName().isBlank()) {
-            flag = false;
+            isValid = false;
             ValidationException exception = new ValidationException("Пустое название фильма!");
             log.debug("Ошибка валидации!", exception);
             throw exception;
         }
         if (film.getDescription().length() > 200) {
-            flag = false;
+            isValid = false;
             ValidationException exception = new ValidationException("Длина описания превышает 200 символов!");
             log.debug("Ошибка валидации!", exception);
             throw exception;
         }
         if (LocalDate.parse(film.getReleaseDate(), formatter).isBefore(LocalDate.of(1895, Month.DECEMBER, 28))) {
-            flag = false;
+            isValid = false;
             ValidationException exception = new ValidationException("Дата релиза ранее 28 декабря 1895 года!");
             log.debug("Ошибка валидации!", exception);
             throw exception;
         }
         if (film.getDuration() <= 0) {
-            flag = false;
+            isValid = false;
             ValidationException exception = new ValidationException("Отрицательная продолжительность фильма!");
             log.debug("Ошибка валидации!", exception);
             throw exception;
         }
 
-        return flag;
+        return isValid;
     }
 
     private void setFilmId(Film film) {
