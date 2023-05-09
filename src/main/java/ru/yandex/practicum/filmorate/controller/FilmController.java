@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
@@ -20,7 +21,7 @@ public class FilmController {
     private int id = 1;
 
     @PostMapping
-    public Film addFilm(@RequestBody Film film) throws ValidationException {
+    public Film addFilm(@RequestBody @Valid Film film) throws ValidationException {
         setFilmId(film);
         if (isFilmValid(film)) {
             log.debug("Будет добавлен фильм: {}", film);
@@ -31,7 +32,7 @@ public class FilmController {
     }
 
     @PutMapping
-    public Film updateFilm(@RequestBody Film film) throws ValidationException {
+    public Film updateFilm(@RequestBody @Valid Film film) throws ValidationException {
         if (!films.containsKey(film.getId())) {
             throw new ValidationException("Фильм не найден!");
         } else {
