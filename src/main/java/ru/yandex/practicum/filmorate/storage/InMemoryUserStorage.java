@@ -43,13 +43,27 @@ public class InMemoryUserStorage implements UserStorage {
         long id = user.getId();
         if (users.containsKey(id)) {
             users.replace(id, user);
-            log.info("Обновлен пользователь с идентификатором {}", user);
+            log.info("Обновлен пользователь с идентификатором {}", id);
         } else {
             log.debug("Пользователь не найден");
             throw new NotFoundException("Пользователь не найден");
         }
+
         return user;
     }
 
+    @Override
+    public User removeUser(User user) {
+        long id = user.getId();
+        if (users.containsKey(id)) {
+            users.remove(id);
+            log.info("Удален пользователь с идентификатором {}", id);
+        } else {
+            log.debug("Пользователь не найден");
+            throw new NotFoundException("Пользователь не найден");
+        }
+
+        return user;
+    }
 
 }

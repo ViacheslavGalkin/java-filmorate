@@ -61,13 +61,13 @@ public class FilmService {
         }
     }
 
-    public Film removeLikes(long filmId, long userID) {
-        if (filmId < 0 || userID < 0) {
+    public Film removeLikes(long filmId, long userId) {
+        if (filmId < 0 || userId < 0) {
             throw new NotFoundException("Идентификатор не может быть отрицательным");
         }
         Film film = getFilmById(filmId);
-        film.getLikes().remove(userID);
-        log.info("Пользователь {} удалил лайк у фильма {}", userID, filmId);
+        film.getLikes().remove(userId);
+        log.info("Пользователь {} удалил лайк у фильма {}", userId, filmId);
         return film;
     }
 

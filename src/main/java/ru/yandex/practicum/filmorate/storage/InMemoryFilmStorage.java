@@ -65,4 +65,18 @@ public class InMemoryFilmStorage implements FilmStorage {
         return film;
     }
 
+    @Override
+    public Film removeFilm(Film film) {
+        long id = film.getId();
+        if (films.containsKey(id)) {
+            films.remove(id);
+            log.info("Удален фильм с идентификатором {}", film.getId());
+        } else {
+            log.debug("Фильм не найден");
+            throw new NotFoundException("Фильм не найден");
+        }
+
+        return film;
+    }
+
 }
