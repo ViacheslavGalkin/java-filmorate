@@ -1,25 +1,43 @@
 package ru.yandex.practicum.filmorate.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Email;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
+import java.time.LocalDate;
+import java.util.*;
 
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
-    @NotNull
-    private int id;
+    private long id;
     @Email
+    @NotEmpty
     private String email;
     @NotBlank
     private String login;
     private String name;
     @NotNull
-    private String birthday;
+    @PastOrPresent
+    private LocalDate birthday;
+    @JsonIgnore
+    final Set<Long> friends = new HashSet<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return email.equals(user.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email);
+    }
 }
